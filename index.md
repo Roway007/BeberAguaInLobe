@@ -1,37 +1,30 @@
-## Welcome to GitHub Pages
+## Welcome!
 
 You can use the [editor on GitHub](https://github.com/Roway007/BeberAguaInLobe/edit/gh-pages/index.md) to maintain and preview the content for your website in Markdown files.
 
 Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
 
-### Markdown
+### Este es mi proyecto es decir un modelo prototipo.
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
 
-```markdown
-Syntax highlighted code block
+import base64
+import requests
 
-# Header 1
-## Header 2
-### Header 3
+# Save string of image file path below
+img_filepath = "path/to/image.jpg"
 
-- Bulleted
-- List
+# Create base64 encoded string
+with open(img_filepath, "rb") as f:
+    image_string = base64.b64encode(f.read()).decode("utf-8")
 
-1. Numbered
-2. List
+# Get response from POST request
+response = requests.post(
+    url="http://localhost:38101/v1/predict/ef84b55d-4fca-4281-ada3-40041ce861f8",
+    json={"image": image_string},
+)
+data = response.json()
+top_prediction = data["predictions"][0]
 
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
-```
-
-For more details see [Basic writing and formatting syntax](https://docs.github.com/en/github/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/Roway007/BeberAguaInLobe/settings/pages). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we’ll help you sort it out.
+# Print the top predicted label and its confidence
+print("predicted label:\t{}\nconfidence:\t\t{}"
+      .format(top_prediction["label"], top_prediction["confidence"]))
